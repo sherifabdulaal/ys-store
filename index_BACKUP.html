@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<!-- YS Store | Home NEW PRODUCT controlled by Supabase show_in_home; max 8 -->
+<!-- YS Store V12.21 | countdown save fixed; approved image layout preserved -->
 <title>YS — Wear Your Style | V12.13</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -345,18 +345,6 @@ header{position:sticky!important;top:0!important;z-index:100;background:#fff!imp
 
 <script src="ys-pic-catalog.js"></script>
 <!-- V15.10.2: Fix Edit for 40 catalog products; first Save converts each catalog item into a normal Supabase product. -->
-
-<style id="ys-v15-10-5-actions-fix">
-.ys14-img{position:relative!important;overflow:hidden!important}
-.ys14-actions{position:absolute;left:50%;bottom:18px;transform:translate(-50%,16px);display:flex;gap:12px;z-index:30;opacity:0;visibility:hidden;transition:.22s ease}
-.ys14-card:hover .ys14-actions{opacity:1;visibility:visible;transform:translate(-50%,0)}
-.ys14-action{width:46px;height:46px;border-radius:50%;border:1px solid #e5e5e5;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.08)}
-.ys14-action:hover,.ys14-action.ys-wish-active{background:#e31d1a;color:#fff;border-color:#e31d1a}
-.ys14-action svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8}
-.ys-wish-clear{border:1px solid #111;background:#fff;color:#111;padding:9px 14px;font-weight:800;cursor:pointer;margin-right:8px}
-.ys-wish-clear:hover{background:#111;color:#fff}
-@media(max-width:760px){.ys14-actions{opacity:1;visibility:visible;transform:translate(-50%,0);bottom:12px}.ys14-action{width:40px;height:40px}}
-</style>
 </head>
 <body>
 <header><div class="wrap"><nav>
@@ -422,7 +410,7 @@ header{position:sticky!important;top:0!important;z-index:100;background:#fff!imp
 
 <footer id="about" class="ys-footer"><div class="wrap ys-footgrid"><div><div class="ys-footbrand">YS<small>WEAR YOUR STYLE</small></div><p>Streetwear that moves with you.<br>Quality, comfort and style for every day.</p><div class="ys-pay">VISA &nbsp; ●● &nbsp; G Pay &nbsp; Apple Pay &nbsp; STC Pay</div></div><div><b>QUICK LINKS</b><a href="#about">About Us</a><a href="#shop">Shop</a><a href="#about">Contact</a><a href="#about">FAQ</a></div><div><b>ACCOUNT</b><a href="#" onclick="openTracking();return false">Orders Tracking</a><a href="#" onclick="toggleCart();return false">Checkout</a><a href="#" onclick="openWishlist();return false">Wishlist</a></div><div><b>NEWSLETTER</b><div class="ys-news"><input placeholder="Enter your email"><button>SUBSCRIBE</button></div><div class="ys-social">● &nbsp; 𝕏 &nbsp; ▶ &nbsp; ◎ &nbsp; ◉</div></div></div><div class="wrap ys-copy"><span>© 2026 YS Store. All Rights Reserved.</span><span>Designed for a Better Tomorrow.</span></div></footer>
 
-<div class="modal" id="wishlistModal"><div class="dialog ys-wish-dialog"><div class="adminhead"><div><h2>MY WISHLIST</h2><div class="statusmsg">Saved products</div></div><div><button class="ys-wish-clear" onclick="clearWishlist()">CLEAR WISHLIST</button><button class="adminbtn" onclick="closeWishlist()">×</button></div></div><div id="wishlistItems" class="ys-wishlist-items"></div></div></div>
+<div class="modal" id="wishlistModal"><div class="dialog ys-wish-dialog"><div class="adminhead"><div><h2>MY WISHLIST</h2><div class="statusmsg">Saved products</div></div><button class="adminbtn" onclick="closeWishlist()">×</button></div><div id="wishlistItems" class="ys-wishlist-items"></div></div></div>
 
 <section class="wrap admin" id="admin">
   <div class="adminhead"><div><h2>ADMIN / PRODUCT MANAGEMENT</h2><div class="statusmsg" id="adminStatus">Not logged in</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="btn hidden" id="importCatalogBtn" onclick="importCatalogToSupabase()">IMPORT 40 CATALOG PRODUCTS</button><button class="btn primary hidden" id="addBtn" onclick="newProduct()">+ ADD PRODUCT</button></div></div>
@@ -512,27 +500,8 @@ function productCardStatus(p){
  if(b)return {text:b.toUpperCase(),cls:/sale/i.test(b)?'badge-sale':'badge-new',out:false};
  return {text:'NEW',cls:'badge-new',out:false};
 }
-const YS_WISH_KEY='ys_wishlist';
-function ysReadWishBridge(){
-  let a=[];
-  try{a=JSON.parse(localStorage.getItem(YS_WISH_KEY)||'[]')||[]}catch(e){}
-  try{
-    const m=String(window.name||'').match(/(?:^|;)YS_WISHLIST=([^;]*)/);
-    if(m){const b=JSON.parse(decodeURIComponent(m[1]))||[];a=[...new Set([...a,...b].map(String))]}
-  }catch(e){}
-  return [...new Set(a.map(String))];
-}
-function ysWriteWishBridge(a){
-  a=[...new Set((a||[]).map(String))];
-  try{localStorage.setItem(YS_WISH_KEY,JSON.stringify(a))}catch(e){}
-  try{
-    const token='YS_WISHLIST='+encodeURIComponent(JSON.stringify(a));
-    const rest=String(window.name||'').split(';').filter(x=>x&&!x.startsWith('YS_WISHLIST='));
-    window.name=[...rest,token].join(';');
-  }catch(e){}
-}
-let wishlist=ysReadWishBridge();
-function saveWishlist(){ysWriteWishBridge(wishlist);updateWishlistUI()}
+let wishlist=JSON.parse(localStorage.getItem('ys_wishlist')||'[]').map(String);
+function saveWishlist(){localStorage.setItem('ys_wishlist',JSON.stringify(wishlist));updateWishlistUI()}
 function updateWishlistUI(){
   const c=document.getElementById('wishCount'); if(c)c.textContent=wishlist.length;
   document.querySelectorAll('.product-action[data-wish-id]').forEach(b=>b.classList.toggle('ys-wish-active',wishlist.includes(String(b.dataset.wishId))));
@@ -546,11 +515,6 @@ function openWishlist(){
 }
 function closeWishlist(){document.getElementById('wishlistModal').classList.remove('show')}
 function removeWishlist(id){wishlist=wishlist.filter(x=>x!==String(id));saveWishlist();openWishlist()}
-function clearWishlist(){
-  if(!wishlist.length)return;
-  if(!confirm('Clear all items from your wishlist?'))return;
-  wishlist=[];saveWishlist();openWishlist();
-}
 
 const YS_CARD_KEY='ys_product_card_display_v2';
 function getCardDisplayMap(){try{return JSON.parse(localStorage.getItem(YS_CARD_KEY)||'{}')||{}}catch(e){return {}}}
@@ -560,9 +524,10 @@ function saveCardDisplay(id){if(!id)return;const m=getCardDisplayMap(),fit=(docu
 function getDetailDisplay(p){const m=getCardDisplayMap(),d=(m[String(p.id)]||{}).detail||{};return {fit:d.fit||'autoaspect',position:d.position||'center',width:Math.max(280,Math.min(700,Number(d.width)||520)),height:Math.max(300,Math.min(700,Number(d.height)||520))}}
 function cardImgLoaded(img){if(!img)return;const fit=img.dataset.fit||'smartfill';img.classList.remove('ys-fit-contain','ys-fit-cover');if(fit==='smartfill')img.classList.add('ys-fit-smartfill');else if(fit==='cover')img.classList.add('ys-fit-cover');else if(fit==='auto'){const r=(img.naturalWidth||1)/(img.naturalHeight||1);img.classList.add(r<0.78?'ys-fit-contain':'ys-fit-cover')}else img.classList.add('ys-fit-contain')}
 function updateCardPreview(){const box=document.getElementById('cardImagePreview');if(!box)return;const url=(document.getElementById('fImageUrl')?.value||'').trim(),g=getGlobalCardDisplay(),selected=document.getElementById('fCardFit')?.value||'global',fit=selected==='global'?g.fit:selected,pos=selected==='global'?g.position:(document.getElementById('fCardPosition')?.value||'center'),h=Math.max(160,Math.min(520,Number(document.getElementById('fCardHeight')?.value)||g.height));const w=Math.max(160,Math.min(420,Number(document.getElementById('fCardWidth')?.value)||g.width));box.style.width=Math.min(w,420)+'px';box.style.height=Math.min(h,520)+'px';box.style.background=g.bg;box.classList.toggle('ys-smart-frame',fit==='smartfill');if(url)box.style.setProperty('--ys-smart-bg','url(\"'+String(url).replace(/\"/g,'%22')+'\")');if(!url){box.innerHTML='<span class="statusmsg">Select/upload an image to preview</span>';return}box.innerHTML=`<img src="${esc(url)}" data-fit="${fit}" class="ys-pos-${pos}" onload="cardImgLoaded(this)">`}
-// Home NEW PRODUCT is controlled permanently from Supabase: products.show_in_home
-function isHomeNewProduct(p){return p&&p.show_in_home===true}
-function homeNewCount(excludeId=null){return products.filter(p=>!p._catalog&&p.active!==false&&p.show_in_home===true&&(excludeId===null||String(p.id)!==String(excludeId))).length}
+const YS_HOME_NEW_KEY='ys_home_new_products_v15101';
+function getHomeNewMap(){try{return JSON.parse(localStorage.getItem(YS_HOME_NEW_KEY)||'{}')||{}}catch(e){return {}}}
+function isHomeNewProduct(p){const m=getHomeNewMap(),k=String(p.id);if(Object.prototype.hasOwnProperty.call(m,k))return m[k]===true;const n=Number(p.id);if(Number.isFinite(n)&&n>=1&&n<=7)return true;return false}
+function saveHomeNewChoice(id,value){if(id===null||id===undefined)return;const m=getHomeNewMap();m[String(id)]=!!value;localStorage.setItem(YS_HOME_NEW_KEY,JSON.stringify(m))}
 function render(cat='All'){
  currentCat=cat;grid.innerHTML='';
  activeProducts().filter(p=>isHomeNewProduct(p)).filter(p=>cat==='All'||p.category===cat).slice(0,8).forEach(p=>{
@@ -572,7 +537,7 @@ function render(cat='All'){
   const heart=`<button class="product-action" data-wish-id="${p.id}" title="Add to Wishlist" aria-label="Add to Wishlist" onclick="event.stopPropagation();toggleWishlist(this,'${p.id}')"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>`;
   const bag=`<button class="product-action" title="${st.out?'Out of Stock':'Add to Bag'}" aria-label="Add to Bag" ${st.out?'disabled':''} onclick="event.stopPropagation();addToCartById('${p.id}')"><svg viewBox="0 0 24 24"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></button>`;
   grid.innerHTML+=`<article class="card ${st.out?'card-out':''}"><div class="pic ${cd.fit==='smartfill'?'ys-smart-frame':''}" style="width:${cd.width}px!important;max-width:100%;height:${cd.height}px!important;background:${cd.bg||'#ffffff'}!important;--ys-smart-bg:url(&quot;${imgs[0]||''}&quot;)">${img}<span class="badge ${st.cls}">${st.text}</span><div class="product-actions">${eye}${heart}${bag}</div></div><div class="info"><div class="name" onclick="openGallery('${p.id}')" style="cursor:pointer">${p.name}</div><div class="meta">${sizes.join(' • ')} &nbsp; | &nbsp; YS Collection</div><div class="swatches">${colors.map(c=>`<span class="dot" style="background:${c}"></span>`).join('')}</div><div class="row"><div class="price">EGP ${Number(p.price||0).toLocaleString()} ${p.old_price?`<span class="old">${Number(p.old_price).toLocaleString()}</span>`:''}</div></div></div></article>`;
- });updateWishlistUI()
+ })
 }
 async function openGallery(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;galleryProduct=p;galleryQuantity=1;galleryQty.textContent='1';galleryVariants=[];if(Number.isFinite(Number(p.id))){const {data,error}=await sb.from('product_variants').select('color,size,stock_quantity,active').eq('product_id',Number(p.id));if(!error)galleryVariants=(data||[]).filter(v=>v.active!==false)}const imgs=productImages(p);galleryName.textContent=p.name||'';galleryBadge.textContent=p.badge||'';galleryPrice.innerHTML=`EGP ${Number(p.price||0).toLocaleString()} ${p.old_price?`<span class="old">${Number(p.old_price).toLocaleString()}</span>`:''}`;gallerySku.textContent=p.sku?`SKU: ${p.sku}`:'';const sizes=Array.isArray(p.sizes)&&p.sizes.length?p.sizes:['S','M','L','XL'];const colors=Array.isArray(p.colors)?p.colors:[];gallerySelectedSize=sizes[0]||'';gallerySelectedColor=colors[0]||'';gallerySizes.innerHTML=sizes.map((v,i)=>`<button class="choice ${i===0?'active':''}" data-value="${esc(v)}" onclick="selectGalleryOption('size',this,'${String(v).replace(/'/g,"\\'")}')">${esc(v)}</button>`).join('');galleryColors.innerHTML=colors.length?colors.map((v,i)=>`<button class="choice ${i===0?'active':''}" data-value="${esc(v)}" onclick="selectGalleryOption('color',this,'${String(v).replace(/'/g,"\\'")}')"><span class="dot" style="display:inline-block;vertical-align:middle;background:${v};margin-right:6px"></span>${esc(v)}</button>`).join(''):'<span class="meta">Default</span>';galleryDesc.textContent=p.description||'YS Collection';galleryThumbs.innerHTML='';showGalleryImagesForColor(gallerySelectedColor);refreshGalleryVariantState();galleryAdd.onclick=()=>addConfiguredToCart();galleryModal.classList.add('show')}
 function selectedVariant(){if(!galleryVariants.length)return null;return galleryVariants.find(v=>String(v.color)===String(gallerySelectedColor)&&String(v.size)===String(gallerySelectedSize))||null}
@@ -613,7 +578,7 @@ function renderAdmin(){
  });
  const b=document.getElementById('importCatalogBtn');if(b){const pending=products.filter(p=>p._catalog).length;b.classList.toggle('hidden',!currentUser||pending===0);b.textContent=pending?`IMPORT ${pending} CATALOG PRODUCTS`:'CATALOG IMPORTED'}
 }
-function newProduct(){editingId=null;window.__editingCatalogProduct=false;['fName','fCategory','fPrice','fOldPrice','fColors','fSizes','fBadge','fDescription','fImageUrl','fSku'].forEach(id=>document.getElementById(id).value='');fActive.value='true';fStock.value='0';variantRows=[];variantDraft={};fImage.value='';fExtraImages.value='';fImageUrls.value='';saveMsg.textContent='';productTitle.textContent='Add Product';colorImageDraft={};if(fShowHome)fShowHome.checked=false;if(document.getElementById('fCardFit'))fCardFit.value='auto';if(document.getElementById('fCardPosition'))fCardPosition.value='center';if(document.getElementById('fCardWidth'))fCardWidth.value='280';if(document.getElementById('fCardHeight'))fCardHeight.value='360';if(document.getElementById('fDetailFit'))fDetailFit.value='autoaspect';if(document.getElementById('fDetailPosition'))fDetailPosition.value='center';if(document.getElementById('fDetailWidth'))fDetailWidth.value='520';if(document.getElementById('fDetailHeight'))fDetailHeight.value='520';productModal.classList.add('show');buildVariantMatrix(false);buildColorImageManager(false);updateCardPreview()}
+function newProduct(){editingId=null;window.__editingCatalogProduct=false;['fName','fCategory','fPrice','fOldPrice','fColors','fSizes','fBadge','fDescription','fImageUrl','fSku'].forEach(id=>document.getElementById(id).value='');fActive.value='true';fStock.value='0';variantRows=[];variantDraft={};fImage.value='';fExtraImages.value='';fImageUrls.value='';saveMsg.textContent='';productTitle.textContent='Add Product';colorImageDraft={};if(fShowHome)fShowHome.checked=true;if(document.getElementById('fCardFit'))fCardFit.value='auto';if(document.getElementById('fCardPosition'))fCardPosition.value='center';if(document.getElementById('fCardWidth'))fCardWidth.value='280';if(document.getElementById('fCardHeight'))fCardHeight.value='360';if(document.getElementById('fDetailFit'))fDetailFit.value='autoaspect';if(document.getElementById('fDetailPosition'))fDetailPosition.value='center';if(document.getElementById('fDetailWidth'))fDetailWidth.value='520';if(document.getElementById('fDetailHeight'))fDetailHeight.value='520';productModal.classList.add('show');buildVariantMatrix(false);buildColorImageManager(false);updateCardPreview()}
 async function editProduct(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;editingId=id;window.__editingCatalogProduct=!!p._catalog;productTitle.textContent='Edit Product';fName.value=p.name||'';fCategory.value=p.category||'';fPrice.value=p.price||0;fOldPrice.value=p.old_price||'';fColors.value=(p.colors||[]).join(', ');fSizes.value=(p.sizes||[]).join(', ');fBadge.value=p.badge||'';fSku.value=p.sku||'';fStock.value=Number(p.stock_quantity??0);fDescription.value=p.description||'';fActive.value=String(p.active);if(fShowHome)fShowHome.checked=isHomeNewProduct(p);fImageUrl.value=p.image_url||'';fImageUrls.value=(p.image_urls||[]).join('\n');fImage.value='';fExtraImages.value='';colorImageDraft=normalizeColorImages(p.color_images);const cd=getCardDisplay(p);if(document.getElementById('fCardFit'))fCardFit.value=cd.override?cd.fit:'global';if(document.getElementById('fCardPosition'))fCardPosition.value=cd.position;if(document.getElementById('fCardWidth'))fCardWidth.value=cd.width;if(document.getElementById('fCardHeight'))fCardHeight.value=cd.height;const dd=getDetailDisplay(p);if(document.getElementById('fDetailFit'))fDetailFit.value=dd.fit;if(document.getElementById('fDetailPosition'))fDetailPosition.value=dd.position;if(document.getElementById('fDetailWidth'))fDetailWidth.value=dd.width;if(document.getElementById('fDetailHeight'))fDetailHeight.value=dd.height;saveMsg.textContent='Loading stock by color & size...';productModal.classList.add('show');
 if(p._catalog){
   // Catalog IDs such as pic-tshirts-01 are not numeric Supabase product IDs yet.
@@ -649,7 +614,7 @@ async function uploadCatalogToSupabase(){
       const up=await sb.storage.from('product-images').upload(path,blob,{cacheControl:'3600',upsert:false,contentType:blob.type||'image/png'});if(up.error)throw up.error;
       publicUrl=sb.storage.from('product-images').getPublicUrl(path).data.publicUrl;
     }
-    const payload={name:p.name,category:p.category,price:Number(p.price||0),old_price:p.old_price?Number(p.old_price):null,colors:Array.isArray(p.colors)?p.colors:[],sizes:Array.isArray(p.sizes)?p.sizes:[],badge:p.badge||null,sku:p.sku||null,stock_quantity:Number(p.stock_quantity||0),description:p.description||null,active:p.active!==false,show_in_home:false,image_url:publicUrl,image_urls:publicUrl?[publicUrl]:[]};
+    const payload={name:p.name,category:p.category,price:Number(p.price||0),old_price:p.old_price?Number(p.old_price):null,colors:Array.isArray(p.colors)?p.colors:[],sizes:Array.isArray(p.sizes)?p.sizes:[],badge:p.badge||null,sku:p.sku||null,stock_quantity:Number(p.stock_quantity||0),description:p.description||null,active:p.active!==false,image_url:publicUrl,image_urls:publicUrl?[publicUrl]:[]};
     const ins=await sb.from('products').insert(payload).select('id').single();if(ins.error)throw ins.error;
     const pid=ins.data.id, colors=payload.colors.length?payload.colors:['Default'], sizes=payload.sizes.length?payload.sizes:['One Size'];
     const total=Math.max(0,Number(payload.stock_quantity||0)), cells=colors.length*sizes.length, base=Math.floor(total/cells), rem=total%cells;let n=0;
@@ -687,9 +652,7 @@ async function saveProduct(){
   imageUrls=[...new Set(imageUrls.filter(u=>u!==imageUrl && !/^(assets\/|\.\/assets\/)/i.test(u)))];
   const colorImages=await collectColorImagesForSave();
   const totalStock=Object.values(variantDraft).reduce((a,v)=>a+Math.max(0,Number(v||0)),0);
-  const wantsHome=!!(fShowHome&&fShowHome.checked);
-  if(wantsHome && homeNewCount(editingId)>=8) throw new Error('Home NEW PRODUCT already has 8 products. Uncheck one existing Home product first.');
-  const payload={name:fName.value.trim(),category:fCategory.value.trim(),price:Number(fPrice.value||0),old_price:fOldPrice.value?Number(fOldPrice.value):null,colors:currentVariantColors(),sizes:currentVariantSizes(),badge:fBadge.value.trim()||null,sku:fSku.value.trim()||null,stock_quantity:totalStock,description:fDescription.value.trim()||null,active:fActive.value==='true',show_in_home:wantsHome,image_url:imageUrl,image_urls:imageUrls,color_images:colorImages};
+  const payload={name:fName.value.trim(),category:fCategory.value.trim(),price:Number(fPrice.value||0),old_price:fOldPrice.value?Number(fOldPrice.value):null,colors:currentVariantColors(),sizes:currentVariantSizes(),badge:fBadge.value.trim()||null,sku:fSku.value.trim()||null,stock_quantity:totalStock,description:fDescription.value.trim()||null,active:fActive.value==='true',image_url:imageUrl,image_urls:imageUrls,color_images:colorImages};
   let productId=editingId;
   if(catalogSource){
     // Convert this one catalog item into a normal Supabase product. From then on Edit works exactly like products 1-7.
@@ -701,6 +664,7 @@ async function saveProduct(){
     const {data,error}=await sb.from('products').insert(payload).select('id').single();if(error)throw error;
     productId=data.id;editingId=productId;
   }
+  saveHomeNewChoice(productId,!!(fShowHome&&fShowHome.checked));
   saveCardDisplay(productId);
   const variantTotal=await saveProductVariants(productId);
   if(variantTotal!==totalStock){const {error}=await sb.from('products').update({stock_quantity:variantTotal}).eq('id',productId);if(error)throw error}
