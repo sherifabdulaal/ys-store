@@ -1,0 +1,11 @@
+YS Store V15.10.18 - Store Sections
+
+Built from V15.10.17.
+Main navigation: HOME | MEN | LADIES | KIDS | ACCESSORIES.
+Added men.html, ladies.html, kids.html.
+Men shows section=Men except Accessories; category filters work inside the page.
+Ladies shows section=Ladies; category filters work inside the page.
+Kids shows section=Kids; category filters work inside the page.
+Existing T-Shirts/Pants/Sneakers/Caps/Hoodies pages are retained as Men category pages and now filter section=Men.
+Accessories remains top-level and supports legacy category=Accessories plus section=Accessories.
+No changes intended to Bag, Wishlist, Checkout, Track Order, Home New Product, or Supabase checkout RPC.

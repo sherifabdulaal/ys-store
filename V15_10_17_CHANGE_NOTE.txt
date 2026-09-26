@@ -1,0 +1,3 @@
+YS Store V15.10.17 - Admin Section
+Based on tested V15.10.15 baseline + V15.10.16 database Section preparation.
+Change scope only: Admin Product Management now supports Section = Men / Ladies / Kids / Accessories, saved to products.section, while Category remains product type.

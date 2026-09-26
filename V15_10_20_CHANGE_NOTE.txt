@@ -1,0 +1,6 @@
+V15.10.20 - Ladies Filter Ready
+
+Based on V15.10.19.
+Only ladies.html changed.
+Ladies price bounds now use active products where section = Ladies (excluding Accessories), across all Ladies categories.
+No Men/Kids/Home/Bag/Wishlist/Checkout/Track Order logic changed.

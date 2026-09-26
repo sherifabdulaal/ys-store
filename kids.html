@@ -730,11 +730,16 @@ header .ys-header-actions .hidden{display:none!important}
 </nav></div></header>
 
 <main>
-<section id="ysRealShopPage"><div class="ys14-shell"><h1 class="ys14-title">Shop</h1><div class="ys14-layout">
+<section id="ysRealShopPage"><div class="ys14-shell"><h1 class="ys14-title">Kids</h1><div class="ys14-layout">
 <aside class="ys14-filters"><h2>Filters</h2>
 <div class="ys14-block"><h3>PRICE</h3><div class="ys14-price-line"></div><div class="ys153-range"><span class="ys153-track"></span><span class="ys153-fill" id="ys153fill"></span><input id="ys153minR" type="range" min="0" max="10000" value="0"><input id="ys153maxR" class="ys153-max" type="range" min="0" max="10000" value="10000"></div><div class="ys14-priceboxes"><label>EGP <input id="ys14min" type="number" value="0"></label><label>EGP <input id="ys14max" type="number" value="10000"></label></div></div>
 <div class="ys14-block"><h3>RATING</h3><label class="ys14-check"><input id="ys14rating" type="checkbox"> ★★★★★</label></div>
-<div class="ys14-block"><h3>CATEGORY</h3><label class="ys14-check ys153-cat" data-href="t-shirts.html"><input type="checkbox"> T-Shirts</label><label class="ys14-check ys153-cat active" data-href="pants.html"><input type="checkbox" checked> Pants</label><label class="ys14-check ys153-cat" data-href="caps.html"><input type="checkbox"> Caps</label><label class="ys14-check ys153-cat" data-href="sneakers.html"><input type="checkbox"> Sneakers</label><label class="ys14-check ys153-cat" data-href="hoodies.html"><input type="checkbox"> Hoodies</label><label class="ys14-check ys153-cat" data-href="accessories.html"><input type="checkbox"> Accessories</label></div>
+<div class="ys14-block"><h3>CATEGORY</h3>
+<label class="ys14-check"><input class="ys-section-cat" type="checkbox" value="T-Shirts"> T-Shirts</label>
+<label class="ys14-check"><input class="ys-section-cat" type="checkbox" value="Pants"> Pants</label>
+<label class="ys14-check"><input class="ys-section-cat" type="checkbox" value="Sneakers"> Sneakers</label>
+<label class="ys14-check"><input class="ys-section-cat" type="checkbox" value="Caps"> Caps</label>
+<label class="ys14-check"><input class="ys-section-cat" type="checkbox" value="Hoodies"> Hoodies</label></div>
 <div class="ys14-block"><h3>AVAILABILITY</h3><label class="ys14-check"><input id="ys14in" type="checkbox"> In stock</label><label class="ys14-check"><input id="ys14out" type="checkbox"> Out of stock</label></div></aside>
 <div><div class="ys14-toolbar"><span id="ys14count">Loading products...</span><select id="ys14sort"><option value="default">Default sorting</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="name">Name: A to Z</option></select></div>
 <div id="ys14grid" class="ys14-grid"></div><div id="ys14empty" class="ys14-empty" style="display:none">No products match these filters.</div></div>
@@ -1575,12 +1580,15 @@ window.addEventListener('load', function(){
 
 <script id="ys-v14-page-js">
 (function(){
- const CAT='Pants';
+ const SECTION='Kids';
  function stock(p){const n=Number(p.stock_quantity);return Number.isFinite(n)?n:0}
  function imageOf(p){try{const a=productImages(p);if(a&&a[0])return a[0]}catch(e){} return (Array.isArray(p.image_urls)&&p.image_urls[0])||p.image_url||''}
  function draw(){
    if(typeof products==='undefined')return;
-   let a=(typeof activeProducts==='function'?activeProducts():products).filter(p=>p.category===CAT && String(p.section||'Men')==='Men');
+   let a=(typeof activeProducts==='function'?activeProducts():products).filter(p=>String(p.section||'Men')===SECTION);
+   if(SECTION==='Men') a=a.filter(p=>p.category!=='Accessories');
+   const selected=[...document.querySelectorAll('.ys-section-cat:checked')].map(x=>x.value);
+   if(selected.length)a=a.filter(p=>selected.includes(p.category));
    const min=Number(document.getElementById('ys14min').value||0),max=Number(document.getElementById('ys14max').value||999999);
    a=a.filter(p=>Number(p.price||0)>=min&&Number(p.price||0)<=max);
    const ins=document.getElementById('ys14in').checked,outs=document.getElementById('ys14out').checked;
@@ -1602,6 +1610,7 @@ window.addEventListener('load', function(){
    document.querySelectorAll('.ys14-card').forEach(function(el){el.onclick=function(){openGallery(el.dataset.pid)}}); if(typeof updateWishlistUI==='function')updateWishlistUI();
  }
  ['ys14min','ys14max','ys14in','ys14out','ys14rating','ys14sort'].forEach(id=>document.getElementById(id)?.addEventListener('input',draw));
+ document.querySelectorAll('.ys-section-cat').forEach(el=>el.addEventListener('change',draw));
  let tries=0;const timer=setInterval(function(){tries++;try{draw();if(typeof products!=='undefined'&&products.length)clearInterval(timer)}catch(e){}if(tries>80)clearInterval(timer)},250);
  window.addEventListener('load',function(){setTimeout(draw,300)});
 })();
@@ -1627,7 +1636,7 @@ window.addEventListener('load', function(){
   function setRealBounds(){
     try{
       if(typeof products==='undefined'||!Array.isArray(products)||!products.length)return false;
-      var arr=products.filter(function(p){return p.category==='Pants' && p.active!==false;})
+      var arr=products.filter(function(p){return p.category==='T-Shirts' && p.active!==false;})
                       .map(function(p){return Number(p.price||0);})
                       .filter(function(n){return Number.isFinite(n);});
       if(!arr.length)return false;
