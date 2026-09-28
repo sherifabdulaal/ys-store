@@ -1,0 +1,10 @@
+YS Store V15.10.32 - Mobile Product Details Modal Fix
+Base: V15.10.31 Mobile Responsive Fix
+
+Scope: index.html mobile CSS only.
+- Product Details modal constrained to mobile viewport.
+- Single-column mobile layout.
+- Product image scales within phone width without cropping/overflow.
+- Horizontal thumbnail strip.
+- Product name, price, stock, SKU, size, color, quantity, description and Add to Bag remain inside viewport.
+- Desktop styles and application/Supabase/cart/product logic unchanged.

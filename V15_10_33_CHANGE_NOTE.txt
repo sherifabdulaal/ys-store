@@ -1,0 +1,16 @@
+YS Store V15.10.33 - Mobile Final UI Fix
+
+Base: V15.10.32
+
+Mobile-only changes:
+1. Home Hero framing shifted to show more of the family image.
+2. Product Details modal fix applied to ALL storefront/category pages.
+   - One-column layout
+   - Product image constrained to a compact mobile height
+   - object-fit: contain
+   - Horizontal thumbnail strip
+3. Wishlist close X enlarged to a 44x44 touch target.
+
+Desktop layout and application logic were not changed.
+Supabase, checkout, stock, cart, wishlist logic, Hero settings, Summer slider,
+and product data logic were not changed.

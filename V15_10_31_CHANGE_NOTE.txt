@@ -1,0 +1,10 @@
+YS Store V15.10.31 - Mobile Responsive Fix
+Base: V15.10.30 Global Home Settings
+
+Scope: CSS-only mobile storefront refinement in index.html.
+- Compact responsive header/navigation/actions.
+- Mobile hero sizing, text wrapping, overlay and buttons.
+- Two-column mobile category layout.
+- Mobile product grid/filter spacing.
+- Mobile Summer Collection and services sizing.
+- Desktop styles and all application/Supabase/checkout logic unchanged.

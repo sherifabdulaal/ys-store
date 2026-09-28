@@ -1,0 +1,12 @@
+YS Store V15.10.36 - Shopping Bag Close Button
+Base: V15.10.35
+
+Change only:
+- Added a clear X close button to Shopping Bag.
+- On mobile the Bag header/X stays visible while scrolling the cart.
+- Existing Bag scrolling/background lock from V15.10.35 retained.
+
+No changes to checkout, products, stock, Supabase, wishlist, tracking,
+Hero, Summer slider, Admin, database or desktop product layout.
+
+Candidate for Master Baseline only after local + GitHub/mobile testing.

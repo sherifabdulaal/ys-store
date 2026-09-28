@@ -1,0 +1,15 @@
+YS Store V15.10.30 - Global Home Settings
+
+Base: V15.10.29 Master Baseline
+Scope: Home Page Setup persistence only.
+
+Changes:
+- Home Page Setup loads from Supabase table public.home_settings (id=1).
+- SAVE HOME PAGE writes settings globally to Supabase.
+- Public devices (desktop/mobile/incognito) read the same Hero, category images, Summer slider, countdown, and Home text.
+- localStorage remains only as fallback/cache.
+- No checkout, cart, wishlist, products, tracking, or section logic changed.
+
+Required once before testing:
+Run STEP_02_GLOBAL_HOME_SETTINGS.sql in Supabase SQL Editor.
+Then open Admin > HOME PAGE SETUP on the computer that currently has the approved settings and press SAVE HOME PAGE once.
