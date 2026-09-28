@@ -1,0 +1,12 @@
+YS Store V15.10.34 - Mobile Modal Compact
+
+Base: V15.10.33
+
+Mobile-only refinements:
+- Checkout close X enlarged to 44x44.
+- Track Your Order close X enlarged to 44x44.
+- Product Details main image reduced to 30vh (max 300px) with object-fit: contain.
+- Product thumbnail strip made slightly more compact.
+- Desktop unchanged.
+- No changes to Supabase, checkout logic, cart, stock, wishlist logic, tracking logic,
+  Hero, Summer slider, product data, or Admin.

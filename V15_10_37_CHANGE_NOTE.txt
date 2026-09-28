@@ -1,0 +1,12 @@
+YS Store V15.10.37 - Hero Default/Fallback Fix
+
+Base: V15.10.36
+Scope: Hero fallback only.
+
+Change:
+- Replaced the old red built-in Hero fallback with the current family Hero artwork.
+- Direct file opening (index.html) now uses the family image when global settings cannot be loaded.
+- localhost/GitHub still load Home Page Setup global settings from Supabase when available.
+- Home Page Setup remains able to change and save the Hero globally.
+
+No other storefront, cart, wishlist, checkout, tracking, modal, product, mobile, or Supabase logic was changed.

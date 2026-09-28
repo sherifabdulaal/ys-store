@@ -1,0 +1,14 @@
+YS Store V15.10.35 - Mobile Modal + Bag Scroll Fix
+Base: V15.10.34
+
+Mobile only:
+1. Product Details X enlarged to 46x46.
+2. Product image area reduced further (24vh, max 225px) and kept object-fit: contain.
+3. Product Details vertical spacing compressed to reduce scrolling.
+4. Shopping Bag drawer now owns vertical touch scrolling.
+5. Background page is locked while Bag is open.
+6. Drawer uses 100dvh, momentum scrolling and overscroll containment.
+
+Desktop and business logic unchanged.
+No changes to Supabase, products, stock logic, checkout logic, tracking logic,
+wishlist logic, Hero, Summer slider, Admin or database.
